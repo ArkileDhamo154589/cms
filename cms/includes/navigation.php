@@ -20,10 +20,10 @@
   
       
          <li>
-             <a href="#">Home </a>
+             <a href="index.php"><?php if($_SERVER['PHP_SELF'] === '/index.php')echo 'class="active"'; ?>Home </a>
          </li>
          <li>
-             <a href="#">Posts</a>
+             <a href="admin">Posts</a>
          </li>
          <li>
              <a href="#">About us</a>
