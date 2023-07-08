@@ -62,7 +62,6 @@
          <?php include "includes/sidebar.php"; ?>
       </div>
    </div>
-
    <!-- /.row -->
    <hr>
    <?php 

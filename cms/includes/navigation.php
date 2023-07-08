@@ -1,6 +1,6 @@
 <?php 
    include "includes/db.php";
-   
+   include "includes/functions.php";
    ?>
 <!-- Navigation -->
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -17,27 +17,19 @@
    </div>
    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-      <?php 
-         $query = "SELECT * FROM category";
-         $select_all_categorys_query = mysqli_query($conn, $query);
-         
-         while ($row = mysqli_fetch_assoc($select_all_categorys_query)) {
-             $cat_title = $row['cat_title'];
-             echo "<li><a href='#'>{$cat_title}</a></li>";
-         }
-         ?>
-      <!--
+  
+      
          <li>
-             <a href="#">About</a>
+             <a href="#">Home </a>
          </li>
          <li>
-             <a href="#">Services</a>
+             <a href="#">Posts</a>
          </li>
          <li>
-             <a href="#">Contact</a>
+             <a href="#">About us</a>
          </li>
          </ul>
-         </div> -->
+         </div>
       <!-- /.navbar-collapse -->
    </div>
    <!-- /.container -->
