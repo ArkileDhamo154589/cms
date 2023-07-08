@@ -1,9 +1,18 @@
 <div class="col-md-4">
 
 
+<?php 
+
+
+if(isset($_POST['submit'])){
+    
+   echo $search = $_POST['search'];
+
+}
 
 
 
+?>
 
 
 
@@ -12,11 +21,11 @@
 <!-- Blog Search Well -->
 <div class="well">
     <h4>Blog Search</h4>
-    <form action="">
+    <form action="" method="post">
     <div class="input-group">
-        <input type="text" class="form-control">
+        <input name="search" type="text" class="form-control">
         <span class="input-group-btn">
-            <button class="btn btn-default" type="button">
+            <button  name="submit" type ="sybmit"class="btn btn-default" type="button">
                 <span class="glyphicon glyphicon-search"></span>
         </button>
         </span>
