@@ -42,7 +42,8 @@ $selcet_query_category = mysqli_query($conn,$query);
                 <?php 
                 while($row = mysqli_fetch_assoc($selcet_query_category)){
                     $cat_title = $row['cat_title'];
-                    echo "<li><a href=\"#\">" . $cat_title . "</a></li>";
+                    $cat_id = $row['cat_id'];
+                    echo "<li><a href='category.php?category=$cat_id'>" . $cat_title . "</a></li>";
                 }
                 ?>
             </ul>

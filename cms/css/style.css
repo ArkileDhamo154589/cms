@@ -1,10 +1,4 @@
-.content {
-    max-height: 4.8em; /* Adjust this value as needed */
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 4; /* Number of lines to display */
-    -webkit-box-orient: vertical;
-  }
+
   .status-bullet-green {
     display: inline-block;
     width: 10px;
@@ -20,4 +14,8 @@
     border-radius: 50%;
     background-color: red;
   }
-  
+  img.img-responsive {
+    width: 1000px;
+    height: 250px;
+}
+
