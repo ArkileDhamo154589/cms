@@ -16,6 +16,17 @@ if (!function_exists('getCategories')) {
         return $result;
     }
 }
+function getUsers($conn) {
+    $query = "SELECT * FROM users";
+    $result = mysqli_query($conn, $query);
+
+    if (!$result) {
+        die("Error: " . mysqli_error($conn));
+    }
+
+    return $result;
+}
+
 
 function insertCategory($conn) {
     if(isset($_POST['submit'])){
@@ -76,18 +87,180 @@ function deleteCategory($conn) {
     }
 }
 
+function delComment($conn) {
+    if(isset($_GΕΤ['delete'])){
+        $delete_come_id = $_GET['delete_come_id'];
+
+        // Delete the data from the database
+        $query = "DELETE FROM comments WHERE comment_id = $delete_come_id";
+        $result = mysqli_query($conn, $query);
+
+        if($result){
+            header("Location: comments.php");
+            echo "Comment has been deleted";
+        }else{
+            echo "Error: " . mysqli_error($conn);
+        }
+    }
+}
+
+
+function UnApprove($conn) {
+    if(isset($_GET['unapprove'])){
+        $the_unapprove = $_GET['unapprove'];
+        //update
+        $query = "UPDATE comments SET comment_status ='unapprove' WHERE comment_id = $the_unapprove";
+        $result = mysqli_query($conn, $query);
+
+        if($result){
+            header("Location: comments.php");
+        }else{
+            echo "Error: " . mysqli_error($conn);
+        }
+    }
+}
+
+function changeToAdmin($conn) {
+    if(isset($_GET['admin'])){
+        $admin = $_GET['admin'];
+        //update
+        $query = "UPDATE users SET user_role ='admin' WHERE user_id = $admin";
+        $result = mysqli_query($conn, $query);
+
+        if($result){
+            header("Location: users.php");
+        }else{
+            echo "Error: " . mysqli_error($conn);
+        }
+    }
+}
+
+function changeSubscriber($conn) {
+    if(isset($_GET['subscriber'])){
+        $subscriber = $_GET['subscriber'];
+        //update
+        $query = "UPDATE users SET user_role ='subscriber' WHERE user_id = $subscriber";
+        $result = mysqli_query($conn, $query);
+
+        if($result){
+            header("Location: users.php");
+        }else{
+            echo "Error: " . mysqli_error($conn);
+        }
+    }
+}
+
+
+
+
 function importAllPosts($conn) {
-    $query = "SELECT * FROM posts";
+    $query = "SELECT posts.*, COUNT(comments.comment_id) AS post_comment_count
+              FROM posts
+              LEFT JOIN comments ON posts.post_id = comments.comment_post_id
+              GROUP BY posts.post_id";
+
     $result = mysqli_query($conn, $query);
-    $posts = array();
+
+    if (!$result) {
+        die("Error: " . mysqli_error($conn));
+    }
+
+    $posts = array(); // Initialize an empty array to hold the posts
 
     while ($row = mysqli_fetch_assoc($result)) {
-        $posts[] = $row;
-        
+        $posts[] = $row; // Add each post row to the array
     }
 
     return $posts;
 }
+function importAllusers($conn) {
+    $query = "SELECT * FROM users";
+    $users = mysqli_query($conn, $query);
+
+    if (!$users) {
+        die("Error: " . mysqli_error($conn));
+    }
+
+    
+
+    return $users;
+}
+
+
+function createUser() {
+    global $conn;
+
+    if (isset($_POST['create_user'])) {
+        $username = $_POST['username'];
+        $user_firstname = $_POST['user_firstname'];
+        $user_lastname = $_POST['user_lastname'];
+        $user_email = $_POST['user_email'];
+        $user_role_id = $_POST['user_role_id'];
+        $user_password = $_POST['user_password'];
+
+        // Additional processing for the form data
+
+        // Insert the user into the database
+        $query = "INSERT INTO users (username, user_firstname, user_lastname, user_email, user_role,user_password) ";
+        $query .= "VALUES ('$username', '$user_firstname', '$user_lastname', '$user_email', '$user_role_id' ,'$user_password')";
+        
+        $create_user_query = mysqli_query($conn, $query);
+
+        if (!$create_user_query) {
+            die("Query Failed: " . mysqli_error($conn));
+        }
+
+        // Redirect to a success page or wherever needed
+        header("Location: users.php");
+        exit;
+    }
+}
+
+function deleteUser($conn) {
+    if (isset($_GET['delete'])) {
+        $the_user_id = $_GET['delete'];
+        $query = "DELETE FROM users WHERE user_id = $the_user_id";
+        $delete_user_query = mysqli_query($conn, $query);
+
+        if (!$delete_user_query) {
+            die("QUERY FAILED" . mysqli_error($conn));
+        }
+        header("Location: users.php");
+        exit;
+    }
+}
+
+// function updateUser($conn)
+// {
+//     if (isset($_POST['update_user'])) {
+//         $user_id = ['user_id'];
+//         $user_firstname = $_POST['user_firstname'];
+//         $user_lastname = $_POST['user_lastname'];
+//         $user_role_id = $_POST['user_role_id'];
+//         $username = $_POST['username'];
+//         $user_email = $_POST['user_email'];
+//         $user_password = $_POST['user_password'];
+
+//         // Additional processing for the form data
+
+//         // Update the user in the database
+//         $query = "UPDATE users SET user_firstname='$user_firstname', user_lastname='$user_lastname', ";
+//         $query .= "user_role='$user_role_id', username='$username', user_email='$user_email', user_password='$user_password' ";
+//         $query .= "WHERE user_id='$user_id'";
+
+//         $update_user_query = mysqli_query($conn, $query);
+
+//         if (!$update_user_query) {
+//             die("Query Failed: " . mysqli_error($conn));
+//         }
+
+//         // Redirect to a success page or wherever needed
+//         header("Location: users.php");
+//         exit;
+//     }
+// }
+    
+
 
 function addPost(){
     global $conn;
@@ -135,67 +308,78 @@ function DeletePost($conn){
 
 $posts = importAllPosts($conn);
 
-function updatePost() {
-    global $conn;
 
-    if (isset($_POST['update_post'])) {
-        // Retrieve the updated values from the form
-        $post_id = $_GET['post_id'];
-        $updated_title = $_POST['title'];
-        $updated_category_id = $_POST['post_category_id'];
-        $updated_author = $_POST['author'];
-        $updated_status = $_POST['status'];
-        $updated_tags = $_POST['tags'];
-        $updated_content = $_POST['post_content'];
 
-        // Perform data validation and sanitization as needed
+function importAllComment($conn) {
+    $query = "SELECT * FROM comments";
+    $result = mysqli_query($conn, $query);
+    $comments = array();
 
-        // Check if a new image has been uploaded
-        if ($_FILES['image']['name']) {
-            $post_image = $_FILES['image']['name'];
-            $post_image_temp = $_FILES['image']['tmp_name'];
-
-            // Move the uploaded image to a desired location
-            move_uploaded_file($post_image_temp, "../images/$post_image");
-        } else {
-            // If no new image is uploaded, retain the existing image
-            $query = "SELECT post_image FROM posts WHERE post_id = ?";
-            $stmt = mysqli_prepare($conn, $query);
-            mysqli_stmt_bind_param($stmt, "i", $post_id);
-            mysqli_stmt_execute($stmt);
-            $result = mysqli_stmt_get_result($stmt);
-            $row = mysqli_fetch_assoc($result);
-            $post_image = $row['post_image'];
-        }
-
-        // Construct the SQL query to update the post
-        $query = "UPDATE posts SET
-            post_title = ?,
-            post_category_id = ?,
-            post_author = ?,
-            post_status = ?,
-            post_image = ?,
-            post_tags = ?,
-            post_content = ?
-            WHERE post_id = ?";
-        $stmt = mysqli_prepare($conn, $query);
-        mysqli_stmt_bind_param($stmt, "sisssssi", $updated_title, $updated_category_id, $updated_author, $updated_status, $post_image, $updated_tags, $updated_content, $post_id);
-        mysqli_stmt_execute($stmt);
-
-        if (mysqli_stmt_affected_rows($stmt) > 0) {
-            // The update was successful
-            // Redirect to a success page or perform any other desired action
-            header("Location: success.php");
-            exit();
-        } else {
-            // An error occurred during the update
-            // Handle the error appropriately (e.g., display an error message)
-            echo "Error updating post: " . mysqli_error($conn);
-        }
-
-        mysqli_stmt_close($stmt);
+    while ($row = mysqli_fetch_assoc($result)) {
+        $comments[] = $row;
+        
     }
+   
+    return $comments;
+
+}
+
+function showComLink(){
+    global $conn;
+    global $comment_post_id;
+    $query = "SELECT * FROM comments WHERE comment_post_id = '$comment_post_id'";
+    $select_post_id_query = mysqli_query($conn, $query);
+    return $select_post_id_query;
 }
 
 
-        ?>
+
+function get_post_count($conn) {
+    $query = "SELECT COUNT(*) as post_count FROM posts";
+    $result = mysqli_query($conn, $query);
+    
+    if ($result) {
+        $row = mysqli_fetch_assoc($result);
+        return $row['post_count'];
+    } else {
+        return 0;
+    }
+}
+
+function get_comm_count($conn){
+    $query = "SELECT COUNT(*) as comment_count FROM comments";
+    $result = mysqli_query($conn,$query);
+
+    if($result){
+        $row = mysqli_fetch_assoc($result);
+        return $row['comment_count'];
+     } else {
+            return 0;
+        }
+    }
+    function get_users_count($conn){
+        $query = "SELECT COUNT(*) as users_count FROM users";
+        $result = mysqli_query($conn,$query);
+    
+        if($result){
+            $row = mysqli_fetch_assoc($result);
+            return $row['users_count'];
+         } else {
+                return 0;
+            }
+        }
+
+        function get_cat_count($conn){
+            $query = "SELECT COUNT(*) as cat_count FROM category";
+            $result = mysqli_query($conn,$query);
+
+            if($result){
+                $row = mysqli_fetch_assoc($result);
+                return $row ['cat_count'];
+            }else{
+                return 0;
+            }
+            }
+        
+    
+  ?>

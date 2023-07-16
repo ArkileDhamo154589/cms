@@ -1,6 +1,6 @@
 <?php 
-   include "includes/db.php";
-   include "includes/functions.php";
+ 
+
    ?>
 <!-- Navigation -->
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -23,7 +23,7 @@
              <a href="index.php"><?php if($_SERVER['PHP_SELF'] === '/index.php')echo 'class="active"'; ?>Home </a>
          </li>
          <li>
-             <a href="admin">Posts</a>
+             <a href="/admin/index.php">Posts</a>
          </li>
          <li>
              <a href="#">About us</a>

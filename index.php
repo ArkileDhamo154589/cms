@@ -12,21 +12,22 @@
       <!-- Blog Entries Column -->
       <div class="col-md-8">
          <?php
+$query = "SELECT * FROM posts WHERE post_status = 'published'";
+$select_all_posts_query = mysqli_query($conn, $query);
 
-         
-            $query = "SELECT * FROM posts";
-            $select_all_posts_query = mysqli_query($conn, $query);
-            
-            while ($row = mysqli_fetch_assoc($select_all_posts_query)) {
-               $post_id = $row['post_id'];
-                $post_title = $row['post_title'];
-                $post_author = $row['post_author'];
-                $post_date = $row['post_date'];
-                $post_image = $row['post_image'];
-                $post_content = $row['post_content'];
-            
-            
-            ?>
+while ($row = mysqli_fetch_assoc($select_all_posts_query)) {
+    $post_id = $row['post_id'];
+    $post_title = $row['post_title'];
+    $post_author = $row['post_author'];
+    $post_date = $row['post_date'];
+    $post_image = $row['post_image'];
+    $post_content = substr($row['post_content'],0,50) ;
+    $post_status  = $row['post_status'];
+
+    if($post_status !== 'published'){
+        echo "NO POST FOUND";
+    } else {
+?>
          <h1 class="page-header">
             Page Heading
             <small>Secondary Text</small>
@@ -46,11 +47,14 @@
          <p class="content"><?php echo  $post_content ?></p>
          <a class="btn btn-primary" href="#">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
          <hr>
-         <?php  }   ?>
+         <?php  
+    }
+}
+?>
       </div>
       <!-- from my includes file i import the file sidebar.php -->
       <!-- Blog Sidebar Widgets Column -->
-      <?php include "includes/sidebar.php"; ?>
+      <?php include "./includes/sidebar.php"; ?>
    </div>
    <!-- /.row -->
    <hr>

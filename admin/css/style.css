@@ -24,3 +24,73 @@
     max-width: 100px;
     height: auto;
 }
+
+/* Add custom CSS to style the panels */
+.panel {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.3s ease;
+}
+
+.panel:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.panel-heading {
+  background-color: #337ab7;
+  color: #fff;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  padding: 10px 15px;
+}
+
+.panel-body {
+  padding: 15px;
+}
+
+.panel-footer {
+  background-color: #f5f5f5;
+  padding: 10px 15px;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+.panel-footer a {
+  color: #337ab7;
+}
+
+.panel-footer a:hover {
+  text-decoration: none;
+}
+
+/* Add custom styles for the icons */
+.panel i {
+  display: block;
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+
+/* Add custom styles for the "huge" class */
+.huge {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+/* Responsive adjustments for small devices */
+@media (max-width: 768px) {
+  .panel {
+    margin-bottom: 20px;
+  }
+}
+
+.pull-right {
+  display: inline-block; /* Για να επιτρέψει την περιστροφή */
+  transition: transform 0.3s ease; /* Κάνει την μετάβαση ομαλή */
+}
+
+.pull-right:hover {
+  transform: rotate(50deg); /* Περιστρέφει το εικονίδιο κατά 90 μοίρες όταν κάνετε hover */
+}
+
+

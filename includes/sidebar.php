@@ -22,16 +22,31 @@
     <!-- /.input-group -->
 </div>
 
+<div class="well">
+             <h4>Login</h4>
+
+                <form method="post" action="includes/login.php">
+                <div class="form-group">
+                    <input name="username" type="text" class="form-control" placeholder="Enter Username">
+                </div>
+
+                  <div class="input-group">
+                    <input name="password" type="password" class="form-control" placeholder="Enter Password">
+                    <span class="input-group-btn">
+                       <button class="btn btn-primary" name="login" type="submit">Submit
+                       </button>
+                    </span>
+                   </div>
+
+                    <div class="form-group">
+
+                        <a href="forgot.php?forgot=<?php echo uniqid(true); ?>">Forgot Password</a>
 
 
+                    </div>
 
-<?php 
+                </form>
 
-$query = "SELECT * FROM category";
-$selcet_query_category = mysqli_query($conn,$query);
-
-
-?>
 
 <!-- Blog Categories Well -->
 <div class="well">
@@ -39,22 +54,21 @@ $selcet_query_category = mysqli_query($conn,$query);
     <div class="row">
         <div class="col-lg-12">
             <ul class="list-unstyled">
-                <?php 
-                while($row = mysqli_fetch_assoc($selcet_query_category)){
-                    $cat_title = $row['cat_title'];
-                    $cat_id = $row['cat_id'];
-                    echo "<li><a href='category.php?category=$cat_id'>" . $cat_title . "</a></li>";
+                <?php
+                $query = "SELECT * FROM category";
+                $result = mysqli_query($conn, $query);
+                $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+                foreach ($categories as $category) {
+                    $cat_title = $category['cat_title'];
+                    $cat_id = $category['cat_id'];
+                    echo "<li><a href='category.php?category=$cat_id'>$cat_title</a></li>";
                 }
                 ?>
             </ul>
         </div>
-        
-        
-        <!-- /.col-lg-6 -->
     </div>
-    <!-- /.row -->
 </div>
-
 
 
 
